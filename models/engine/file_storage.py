@@ -25,8 +25,13 @@ class FileStorage():
     classes_dict = {"BaseModel": BaseModel, "User": User, "Place": Place,
                     "City": City, "Review": Review, "State": State}
 
-    def all(self):
-        """Returns the dictionary __objects"""
+    def all(self, cls=None):
+        """Returns the dictionary __objects
+        Returns the list of objects of one type of class. Example below with
+        State - it’s an optional filtering"""
+        if cls is not None:
+            return {k: v for k, v in self.__objects.items()
+                    if isinstance(v, cls)}
         return self.__objects
 
     def new(self, obj):
@@ -55,3 +60,11 @@ class FileStorage():
                     self.__objects[k] = new_obj
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """Deletes obj from __objects if it's inside"""
+        if obj is not None:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            if key in self.__objects:
+                del self.__objects[key]
+                self.save()
