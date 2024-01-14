@@ -27,9 +27,15 @@ class BaseModel():
             self.updated_at = datetime.now()
             models.storage.new(self)
         else:
+            if 'id' not in kwargs:
+                kwargs['id'] = str(uuid4())
+            if 'updated_at' not in kwargs:
+                kwargs['updated_at'] = datetime.now()
+            if 'created_at' not in kwargs:
+                kwargs['created_at'] = datetime.now()
             for k, v in kwargs.items():
                 if k == "updated_at" or k == "created_at":
-                    self.__dict__[k] = datetime.fromisoformat(v)
+                    self.__dict__[k] = datetime.fromisoformat(str(v))
                 elif k == "__class__":
                     continue
                 elif k == "id":

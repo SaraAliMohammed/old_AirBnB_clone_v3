@@ -74,6 +74,28 @@ class HBNBCommand(cmd.Cmd):
         print("*** Unknown syntax: {}".format(arg))
         return False
 
+    def dic_create(self, args):
+        """creates a dictionary from a list of arguments"""
+        dic = {}
+        for arg in args:
+            if "=" in arg:
+                property_to_add = arg.split('=', 1)
+                key = property_to_add[0]
+                value = property_to_add[1]
+                if value and len(value) >= 2 and value[0] == value[-1] == '"':
+                    value = value[1:-1]
+                    value = value.replace('_', ' ')
+                else:
+                    try:
+                        value = int(value)
+                    except Exception:
+                        try:
+                            value = float(value)
+                        except Exception:
+                            continue
+                dic[key] = value
+        return (dic)
+
     def do_create(self, line):
         """Creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id"""
@@ -85,7 +107,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         else:
-            new_instance = eval(class_name)()
+            dic = self.dic_create((line.split())[1:])
+            new_instance = eval(class_name)(**dic)
             new_instance.save()
             print(new_instance.id)
 
