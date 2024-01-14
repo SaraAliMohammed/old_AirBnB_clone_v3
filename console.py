@@ -108,7 +108,9 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             dic = self.dic_create((line.split())[1:])
-            new_instance = eval(class_name)(**dic)
+            new_instance = eval(class_name)()
+            for key, value in dic.items():
+                setattr(new_instance, key, value)
             new_instance.save()
             print(new_instance.id)
 
