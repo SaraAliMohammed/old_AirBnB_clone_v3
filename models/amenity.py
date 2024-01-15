@@ -1,12 +1,19 @@
 #!/usr/bin/python3
 """Defines the Amenity Module"""
-from models.base_model import BaseModel
+import models
+from models.base_model import BaseModel, Base
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String
 
 
-class Amenity(BaseModel):
+class Amenity(BaseModel, Base):
     """
     Amenity Class.
     Attributes:
         name (string): Amenity name.
     """
-    name = ""
+    if models.is_type == "db":
+        __tablename__ = 'amenities'
+        name = Column(String(128), nullable=False)
+    else:
+        name = ""

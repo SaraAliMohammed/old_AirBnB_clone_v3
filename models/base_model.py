@@ -3,12 +3,22 @@
 from uuid import uuid4
 from datetime import datetime
 import models
+from sqlalchemy import Column, String, DATETIME
+from sqlalchemy.ext.declarative import declarative_base
+
+if models.is_type == "db":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel():
     """
     Defines all common attributes/methods for other classes.
     """
+    id = Column(String(60), nullable=False, primary_key=True, unique=True)
+    created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """
@@ -25,7 +35,6 @@ class BaseModel():
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            models.storage.new(self)
         else:
             if 'id' not in kwargs:
                 kwargs['id'] = str(uuid4())
@@ -52,6 +61,7 @@ class BaseModel():
         """Updates the public instance attribute updated_at
         with the current datetime"""
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
@@ -64,4 +74,10 @@ class BaseModel():
                 obj_dict[k] = v.isoformat()
             else:
                 obj_dict[k] = v
+        if "_sa_instance_state" in obj_dict:
+            del obj_dict["_sa_instance_state"]
         return obj_dict
+
+    def delete(self):
+        """Delete the current instance from the storage"""
+        models.storage.delete(self)
