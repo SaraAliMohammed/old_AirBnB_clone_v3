@@ -8,6 +8,16 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table
 
 
+if models.is_type == "db":
+    relationship_table = Table('place_amenity', Base.metadata,
+                               Column('place_id', String(60),
+                                      ForeignKey('places.id'),
+                                      nullable=False),
+                               Column('amenity_id', String(60),
+                                      ForeignKey('amenities.id'),
+                                      nullable=False))
+
+
 class Place(BaseModel, Base):
     """
     Place class.
@@ -38,6 +48,8 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
         amenity_ids = []
         reviews = relationship('Review', backref='place', cascade='delete')
+        amenities = relationship('Amenity', secondary=relationship_table,
+                                 viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -50,8 +62,21 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
         @property
         def reviews(self):
             """ Place reviews """
             reviews = models.storage.all(Review).values()
             return {rev for rev in reviews if rev.place_id == self.id}
+
+        @property
+        def amenities(self):
+            """ Place amenities """
+            ams = models.storage.all(Amenity).values()
+            return [am for am in ams if am.id in self.amenity_ids]
+
+        @amenities.setter
+        def amenities(self, value):
+            """ Amenities setter """
+            if type(value) is Amenity:
+                self.amenity_ids.append(value.id)
