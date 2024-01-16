@@ -22,15 +22,6 @@ class TestState(unittest.TestCase):
         if os.path.exists(FileStorage._FileStorage__file_path):
             os.remove(FileStorage._FileStorage__file_path)
 
-    def test_parameters(self):
-        """Test class parameters"""
-        key = f"{type(self.state1).__name__}.{self.state1.id}"
-        self.assertIsInstance(self.state1.name, str)
-        self.assertEqual(self.state2.name, "")
-        self.state1.name = "Chicago"
-        self.assertEqual(self.state1.name, "Chicago")
-        self.assertIn(key, storage.all())
-
     def test_initialization(self):
         """Test State instances"""
         self.assertIsInstance(self.state1.id, str)

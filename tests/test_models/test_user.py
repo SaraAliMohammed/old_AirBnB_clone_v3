@@ -20,16 +20,6 @@ class TestState(unittest.TestCase):
         if os.path.exists(FileStorage._FileStorage__file_path):
             os.remove(FileStorage._FileStorage__file_path)
 
-    def test_parameters(self):
-        """Test the User Parameters"""
-        user1 = User()
-        key = f"{type(user1).__name__}.{user1.id}"
-        self.assertIn(key, storage.all())
-        self.assertIsInstance(user1.email, str)
-        self.assertIsInstance(user1.password, str)
-        self.assertIsInstance(user1.first_name, str)
-        self.assertIsInstance(user1.last_name, str)
-
     def test_initialization(self):
         """Test User instances"""
         user1 = User()

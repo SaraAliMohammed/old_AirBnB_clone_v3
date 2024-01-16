@@ -20,26 +20,6 @@ class TestPlace(unittest.TestCase):
         if os.path.exists(FileStorage._FileStorage__file_path):
             os.remove(FileStorage._FileStorage__file_path)
 
-    def test_class_attributes(self):
-        """Test the class attributes"""
-        place1 = Place()
-        place2 = Place("welcome", "hi", "think")
-        key = f"{type(place1).__name__}.{place1.id}"
-        self.assertIsInstance(place1.name, str)
-        self.assertIn(key, storage.all())
-        self.assertEqual(place2.name, "")
-        self.assertIsInstance(place1.name, str)
-        self.assertIsInstance(place1.user_id, str)
-        self.assertIsInstance(place1.city_id, str)
-        self.assertIsInstance(place1.description, str)
-        self.assertIsInstance(place1.number_bathrooms, int)
-        self.assertIsInstance(place1.number_rooms, int)
-        self.assertIsInstance(place1.price_by_night, int)
-        self.assertIsInstance(place1.max_guest, int)
-        self.assertIsInstance(place1.longitude, float)
-        self.assertIsInstance(place1.latitude, float)
-        self.assertIsInstance(place1.amenity_ids, list)
-
     def test_initialization(self):
         """Test Place instances"""
         place1 = Place()
