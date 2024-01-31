@@ -13,13 +13,13 @@ sudo mkdir -p /data/web_static/shared/
 
 # Create a fake HTML file
 sudo touch /data/web_static/releases/test/index.html
-echo "<html>
+sudo bash -c 'echo "<html>
   <head>
   </head>
   <body>
-    <h1>Testing Nginx configuration <h1>
+    <h1>Holberton School <h1>
   </body>
-</html>" > sudo /data/web_static/releases/test/index.html
+</html>" > /data/web_static/releases/test/index.html'
 
 # Create a symbolic link /data/web_static/current linked to the
 # /data/web_static/releases/test/ folder
@@ -30,7 +30,7 @@ sudo chown -R ubuntu:ubuntu /data/
 sudo chmod -R 755 /data/
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
-sudo sed -i '48 i \\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+sudo sed -i '/server_name _;/a \\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
 
 # Restart nginx
 sudo service nginx restart
