@@ -1,36 +1,14 @@
-# Bash script that sets up your web servers for the deployment of web_static.
+#!/usr/bin/env bash
+# set up dummy html
 
-# Install Nginx if it not already installed
-if [ ! -x /usr/sbin/nginx ]
-then
-    sudo apt-get -y update
-    sudo apt-get -y install nginx
-fi
-
-# Create the folders
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
-
-# Create a fake HTML file
-sudo touch /data/web_static/releases/test/index.html
-sudo bash -c 'echo "<html>
-  <head>
-  </head>
-  <body>
-    <h1>Holberton School <h1>
-  </body>
-</html>" > /data/web_static/releases/test/index.html'
-
-# Create a symbolic link /data/web_static/current linked to the
-# /data/web_static/releases/test/ folder
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-
-# Give ownership of the /data/ folder to the ubuntu user AND group
-sudo chown -R ubuntu:ubuntu /data/
-sudo chmod -R 755 /data/
-
-# Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
-sudo sed -i '/server_name _;/a \\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
-
-# Restart nginx
+server="\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}"
+file="/etc/nginx/sites-available/default"
+sudo apt-get update -y
+sudo apt-get install nginx -y
+sudo mkdir -p "/data/web_static/releases/test/"
+sudo mkdir "/data/web_static/shared/"
+echo "Holberton" > "/data/web_static/releases/test/index.html"
+rm -f "/data/web_static/current"; ln -s "/data/web_static/releases/test/" "/data/web_static/current"
+sudo chown -hR ubuntu:ubuntu "/data/"
+sudo sed -i "29i\ $server" "$file"
 sudo service nginx restart
