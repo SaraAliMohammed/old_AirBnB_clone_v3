@@ -9,7 +9,7 @@ from datetime import datetime
 
 env.user = 'ubuntu'
 env.hosts = ["54.89.118.156", "54.87.209.214"]
-env.key_filename = "~/id_rsa"
+env.key_filename = "~/school"
 
 
 def do_pack():
