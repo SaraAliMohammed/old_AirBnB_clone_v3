@@ -4,7 +4,7 @@ from fabric.api import *
 import os.path
 
 env.user = 'ubuntu'
-env.hosts = ["104.196.155.240", "34.74.146.120"]
+env.hosts = ["54.89.118.156", "54.87.209.214"]
 env.key_filename = "~/id_rsa"
 
 
