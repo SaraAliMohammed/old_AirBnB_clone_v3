@@ -14,7 +14,7 @@ def show_states():
             in DBStorage sorted by name (A->Z) tip
         LI tag: description of one State:
             <state.id>: <B><state.name></B> """
-    states = storage.all("State").values()
+    states = storage.all("State")
     return render_template("7-states_list.html", states=states)
 
 
