@@ -58,6 +58,8 @@
 	display: none;
 	box-sizing: border-box;
 	padding: 15%;
+	max-height: 300px;
+        overflow-y: auto;
 }
 
 .container .filters ul.popover h2 {
