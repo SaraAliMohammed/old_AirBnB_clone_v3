@@ -5,6 +5,7 @@ from models import storage
 
 app = Flask(__name__)
 
+
 @app.route("/states_list", strict_slashes=False)
 def show_states():
     """ Display a HTML page: (inside the tag BODY)
