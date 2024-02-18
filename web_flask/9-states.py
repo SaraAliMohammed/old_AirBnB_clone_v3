@@ -2,6 +2,8 @@
 ''' Script that starts a Flask web application '''
 from flask import Flask, render_template
 from models import storage
+from models.state import State
+
 
 app = Flask(__name__)
 
@@ -14,7 +16,7 @@ def states():
         in DBStorage sorted by name (A->Z) tip
     LI tag: description of one State: <state.id>: <B><state.name></B>"""
 
-    states = storage.all("State")
+    states = storage.all(State)
     return render_template("9-states.html", states=states)
 
 
@@ -31,7 +33,7 @@ def states_id(id):
         H1 tag: 'Not found!'
     """
 
-    states = storage.all("State").values()
+    states = storage.all(State).values()
     for state in states:
         if state.id == id:
             return render_template("9-states.html", states=state)
