@@ -2,6 +2,8 @@
 ''' Script that starts a Flask web application '''
 from flask import Flask, render_template
 from models import storage
+from models.state import State
+
 
 app = Flask(__name__)
 
@@ -17,7 +19,7 @@ def show_cities_by_states():
         City objects linked to the State sorted by name (A->Z)
             LI tag: description of one City:
                 <city.id>: <B><city.name></B>"""
-    states = storage.all("State").values()
+    states = storage.all(State).values()
     return render_template("8-cities_by_states.html", states=states)
 
 
