@@ -179,3 +179,22 @@ class TestDBStorage(unittest.TestCase):
         self.assertEqual(new_count[0][0], old_count[0][0] + 1)
         cur.close()
         db.close()
+
+    def test_get_user(self):
+        # Test retrieving a user object
+        new_user = User(name="Test User", email="test@example.com")
+        self.storage.new(new_user)
+        self.storage.save()
+
+        retrieved_user = self.storage.get(User, new_user.id)
+        self.assertEqual(retrieved_user.name, "Test User")
+        self.assertEqual(retrieved_user.email, "test@example.com")
+
+    def test_count_all_objects(self):
+        # Test counting all objects in storage
+        user_count_before = self.storage.count(User)
+        new_user = User(name="Test User", email="test@example.com")
+        self.storage.new(new_user)
+        self.storage.save()
+        user_count_after = self.storage.count(User)
+        self.assertEqual(user_count_after, user_count_before + 1)

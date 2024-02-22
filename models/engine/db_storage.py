@@ -80,3 +80,32 @@ class DBStorage:
     def close(self):
         """Closes the storage engine."""
         self.__session.close()
+
+    def get(self, cls, id):
+        """
+        Returns the object based on the class name and its ID, or None if not
+        found
+        """
+        objects = self.__session.query(cls)
+        for obj in objects:
+            if obj.id == id:
+                return obj
+        return None
+
+    def count(self, cls=None):
+        '''
+        Count the number of objects in storage.
+        Args:
+            cls: class (optional).
+        Returns:
+            The number of objects in storage matching the given class.
+            If no class is passed, returns the count of all objects in storage.
+        '''
+        if cls is None:
+            counts = 0
+            classes = (User, State, City, Amenity, Place, Review)
+            for class_type in classes:
+                counts += self.__session.query(class_type).count()
+            return counts
+        else:
+            return self.__session.query(cls).count()

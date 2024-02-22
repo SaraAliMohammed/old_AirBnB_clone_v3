@@ -4,7 +4,8 @@ import os
 import unittest
 from models import storage
 from models.base_model import BaseModel
-
+from models.user import User
+from models.engine.file_storage import FileStorage
 
 @unittest.skipIf(
     os.getenv('HBNB_TYPE_STORAGE') == 'db', 'FileStorage test')
@@ -112,3 +113,18 @@ class TestFileStorage(unittest.TestCase):
         """ FileStorage object storage created """
         from models.engine.file_storage import FileStorage
         self.assertEqual(type(storage), FileStorage)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """Test that get properly returns a requested object"""
+        storage = FileStorage()
+        user = User(name="User1")
+        user.save()
+        self.assertEqual(user, storage.get("User", user.id))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """Test that count properly counts all objects"""
+        storage = FileStorage()
+        nobjs = len(storage._FileStorage__objects)
+        self.assertEqual(nobjs, storage.count())
