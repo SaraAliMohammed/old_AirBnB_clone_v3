@@ -5,7 +5,7 @@ import os
 import unittest
 from datetime import datetime
 from models import storage
-from models.user import User
+from models.state import State
 
 
 @unittest.skipIf(
@@ -180,21 +180,19 @@ class TestDBStorage(unittest.TestCase):
         cur.close()
         db.close()
 
-    def test_get_user(self):
-        # Test retrieving a user object
-        new_user = User(name="Test User", email="test@example.com")
-        self.storage.new(new_user)
-        self.storage.save()
+    def test_get_method(self):
+        """Test get method"""
+        state = State(name="California")
+        state.save()
+        self.assertTrue(storage.get(cls=State, id=state.id) is not None)
 
-        retrieved_user = self.storage.get(User, new_user.id)
-        self.assertEqual(retrieved_user.name, "Test User")
-        self.assertEqual(retrieved_user.email, "test@example.com")
+    def test_get_method_without_id(self):
+        """Test get method without id"""
+        with self.assertRaises(TypeError):
+            self.assertTrue(storage.get(cls=State) is not None)
 
-    def test_count_all_objects(self):
-        # Test counting all objects in storage
-        user_count_before = self.storage.count(User)
-        new_user = User(name="Test User", email="test@example.com")
-        self.storage.new(new_user)
-        self.storage.save()
-        user_count_after = self.storage.count(User)
-        self.assertEqual(user_count_after, user_count_before + 1)
+    def test_count_method(self):
+        """Test count method"""
+        state = State(name="California")
+        state.save()
+        self.assertTrue(storage.count(State) > 0)

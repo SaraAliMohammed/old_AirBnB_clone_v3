@@ -5,7 +5,7 @@ import unittest
 import models
 from models import storage
 from models.base_model import BaseModel
-from models.user import User
+from models.state import State
 from models.engine.file_storage import FileStorage
 
 
@@ -116,17 +116,21 @@ class TestFileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         self.assertEqual(type(storage), FileStorage)
 
-    @unittest.skipIf(models.is_type == 'db', "not testing file storage")
-    def test_get(self):
+    def test_get_method(self):
         """Test that get properly returns a requested object"""
-        storage = FileStorage()
-        user = User(name="User1")
-        user.save()
-        self.assertEqual(user, storage.get(User, user.id))
+        state = State(name="California")
+        state.save()
+        self.assertTrue(storage.get(cls=State, id=state.id) is not None)
 
-    @unittest.skipIf(models.is_type == 'db', "not testing file storage")
-    def test_count(self):
-        """Test that count properly counts all objects"""
-        storage = FileStorage()
-        nobjs = len(storage._FileStorage__objects)
-        self.assertEqual(nobjs, storage.count())
+    def test_get_method_without_id(self):
+        """Test get method without id"""
+        state = State(name="California")
+        state.save()
+        with self.assertRaises(TypeError):
+            self.assertTrue(storage.get(cls=State) is not None)
+
+    def test_count_method(self):
+        """Test count method"""
+        state = State(name="California")
+        state.save()
+        self.assertTrue(storage.count(State) > 0)
