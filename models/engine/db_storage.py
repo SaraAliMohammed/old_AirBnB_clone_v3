@@ -108,4 +108,4 @@ class DBStorage:
                 counts += self.__session.query(class_type).count()
             return counts
         else:
-            return self.__session.query(cls).count()
+            return self.__session.query(eval(cls)).count()
