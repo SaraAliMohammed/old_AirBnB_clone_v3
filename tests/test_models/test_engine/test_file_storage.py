@@ -2,6 +2,7 @@
 """ Module for testing the file storage"""
 import os
 import unittest
+import models
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -114,7 +115,7 @@ class TestFileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         self.assertEqual(type(storage), FileStorage)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    @unittest.skipIf(models.is_type == 'db', "not testing file storage")
     def test_get(self):
         """Test that get properly returns a requested object"""
         storage = FileStorage()
@@ -122,7 +123,7 @@ class TestFileStorage(unittest.TestCase):
         user.save()
         self.assertEqual(user, storage.get("User", user.id))
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    @unittest.skipIf(models.is_type == 'db', "not testing file storage")
     def test_count(self):
         """Test that count properly counts all objects"""
         storage = FileStorage()
